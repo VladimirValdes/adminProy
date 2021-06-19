@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
 import { PagesComponent } from './pages.component';
 import { ProgressComponent } from './progress/progress.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 
 
@@ -18,6 +19,7 @@ import { ProgressComponent } from './progress/progress.component';
     ProgressComponent,
     PagesComponent,
     Grafica1Component,
+    AccountSettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { ProgressComponent } from './progress/progress.component';
     DashboardComponent,
     ProgressComponent,
     PagesComponent,
-    Grafica1Component
+    Grafica1Component,
+    AccountSettingsComponent,
   ]
 })
 export class PagesModule { }
