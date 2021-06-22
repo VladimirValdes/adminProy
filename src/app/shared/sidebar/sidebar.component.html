@@ -24,8 +24,13 @@
                     <i [class]="opt.icono"></i>
                     <span class="hide-menu"> {{ opt.titulo }} 
                     <span class="label label-rouded label-themecolor pull-right">{{ opt.submenu.length }}</span></span></a>
-                    <ul *ngFor="let subopt of opt.submenu" aria-expanded="false" class="collapse">
-                        <li><a [routerLink]="subopt.url">{{ subopt.titulo }}</a></li>
+                    <ul  aria-expanded="false" class="collapse">
+                        <li *ngFor="let subopt of opt.submenu">
+                            <a [routerLink]="subopt.url"
+                               routerLinkActive="active"
+                               [routerLinkActiveOptions]="{ exact: true }">
+                                {{ subopt.titulo }}
+                            </a></li>
                     </ul>
                 </li>
             </ul>
