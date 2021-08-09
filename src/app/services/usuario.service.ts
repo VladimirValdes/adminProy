@@ -19,13 +19,24 @@ export class UsuarioService {
 
   userToken = '';
   auth2: any;
+  // public user: Usuario = new Usuario(" "," ", " ", " ");
+  public user: Usuario;
 
 
   constructor( private http: HttpClient, 
                private router: Router,
                private ngZone: NgZone ) { 
+    this.user = new Usuario('', '', '', '', '');
     this.readToken();
     this.googleInit();
+  }
+
+  get token() {
+    return this.readToken();
+  }
+
+  get uid() {
+    return this.user.uid || '';
   }
 
   googleInit() {
@@ -50,16 +61,28 @@ export class UsuarioService {
 
   validarToken(): Observable<boolean> {
 
-   let token = this.readToken();
+  //  let token = this.readToken();
 
    return this.http.get(`${ base_url }/auth/renew`, { 
      headers: {
-       'x-token': token
+       'x-token': this.token
      }}).pipe(
-        tap( ( resp: any ) => {
-            this.saveToken( resp.token )
+        map( ( resp: any ) => {
+
+            const { nombre,
+                    correo,
+                    estado,
+                    google,
+                    img = '',
+                    rol,
+                    uid } = resp.user;
+
+
+            this.user = new Usuario( nombre, correo, estado, "", uid, " ", google, img, rol);
+            console.log( this.user );
+            this.saveToken( resp.token );
+            return true;
         }),
-        map( resp => true ),
         catchError( error => of(false))
      );
 
@@ -76,6 +99,20 @@ export class UsuarioService {
                         return resp;
                       })
                     );
+  }
+
+  actualizarUser( data: { email: string, nombre: string, rol: string | undefined }) {
+
+    data = {
+      ...data,
+      rol: this.user.rol
+    }
+
+    return this.http.put(`${ base_url}/usuarios/${ this.uid }`, data, {
+      headers: {
+        'x-token': this.token
+      }
+    });
   }
 
   login( formData: loginForm ): Observable< Usuario > {

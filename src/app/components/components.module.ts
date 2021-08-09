@@ -13,7 +13,7 @@ import { DonaComponent } from './dona/dona.component';
 @NgModule({
   declarations: [
     IncrementadorComponent,
-    DonaComponent
+    DonaComponent,
   ],
   imports: [
     CommonModule,

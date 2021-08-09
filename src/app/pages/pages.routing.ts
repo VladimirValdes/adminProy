@@ -8,6 +8,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
     {
@@ -20,7 +21,9 @@ const routes: Routes = [
             { path: 'grafica1', component: Grafica1Component, data: { titulo: 'Grafica #1'} },
             { path: 'account-settings', component: AccountSettingsComponent, data: { titulo: 'Account Settings'} },
             { path: 'promesas', component: PromesasComponent, data: { titulo: 'Promesas'} },
-            { path: 'rxjs', component: RxjsComponent, data: { titulo: 'RxJs'} }
+            { path: 'rxjs', component: RxjsComponent, data: { titulo: 'RxJs'} },
+            { path: 'profile', component: UserProfileComponent, data: { titulo: 'Profile'} }
+
 
 
 
