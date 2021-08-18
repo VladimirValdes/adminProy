@@ -3,11 +3,12 @@ import { Injectable, NgZone } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, tap, catchError, delay } from 'rxjs/operators';
 
 import { loginForm } from '../interfaces/login-form.interface';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { Usuario } from '../models/user.model';
+import { cargaUsuarios } from '../interfaces/cargar-usuarios.interface';
 
 const base_url = environment.base_url;
 declare const gapi: any;
@@ -37,6 +38,15 @@ export class UsuarioService {
 
   get uid() {
     return this.user.uid || '';
+  }
+
+  get headers() {
+    
+    return {
+       headers: {
+      'x-token': this.token
+      }
+    };
   }
 
   googleInit() {
@@ -113,6 +123,32 @@ export class UsuarioService {
         'x-token': this.token
       }
     });
+  }
+
+
+  actulizarRol( data: Usuario ) {
+    return this.http.put(`${ base_url}/usuarios/${ data.uid }`, data, this.headers);
+  }
+
+  cargarUsers( page: number = 1 ): Observable<cargaUsuarios> {
+    return this.http.get< cargaUsuarios >(`${ base_url }/usuarios?page=${ page }`, this.headers )
+                    .pipe(
+                      map( resp => {
+                        const usuarios = resp.usuarios.map( 
+                          user => new Usuario( user.nombre, user.correo, user.estado,
+                                                        '', user.uid, '', user.google, user.img,
+                                                        user.rol));
+                        return {
+                          total: resp.total,
+                          usuarios,
+                          desde: resp.desde
+                        }
+                      }),
+                    )
+  }
+
+  eleminarUser( uid: string ) {
+    return this.http.delete(`${ base_url }/usuarios/${ uid }`, this.headers);
   }
 
   login( formData: loginForm ): Observable< Usuario > {
