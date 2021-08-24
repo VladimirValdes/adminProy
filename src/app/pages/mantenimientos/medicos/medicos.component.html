@@ -1,1 +1,117 @@
-<p>medicos works!</p>
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <input type="text"
+                        class="form-control"
+                        placeholder="Buscar hospital..."
+                        #txtTermino
+                        (keyup)="search(txtTermino.value)"
+                        >
+
+            </div>
+        </div>
+    </div>
+</div> 
+
+<div class="row animated fadeIn fast"
+    *ngIf="loading">
+    <div class="col-12">
+        
+        <div class="alert alert-info text-center">
+          <h4 class="alert-heading">Cargando</h4>
+          <i class="fa fa-spin fa-refresh fa-2x"></i>
+          <p class="mb-0">Por favor espere</p>
+        </div>
+
+    </div>
+</div> 
+
+
+<div class="row"
+    *ngIf="!loading">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-8">
+                        <h4 class="card-title">Medicos ({{ total }})</h4>
+                        <h6 class="card-subtitle">
+                            Medicos registrados en mi aplicación
+                        </h6>
+                    </div>
+
+                    <div class="col">
+                        <div class="text-right">
+                            <button class="btn btn-primary"
+                                [routerLink]="['../medico/nuevo']">
+                                <i class="fa fa-hospital-o"></i> 
+                                Crear Medico
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+
+
+                
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="w100">Foto</th>
+                                <th>Nombre</th>
+                                <th class="w100 text-nowrap">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let medic of medicos">
+                                <td class="text-center"> 
+                                    <img 
+                                    [src]="medic.img! | imgen: 'medicos'"
+                                    alt="hospital-img"
+                                    class="avatar cursor"
+                                    (click)="abrirModal(medic)"> 
+                                </td>
+                                <td>
+                                   
+                                    {{  medic.nombre }}
+                                </td>
+                                
+                                <td class="text-nowrap text-center">
+                                    <a 
+                                        data-toggle="tooltip" 
+                                        class="cursor"
+                                        data-original-title="Guardar cambios"
+                                        [routerLink]="['../medico', medic._id ]"> 
+                                        <i class="fa fa-pencil text-inverse m-r-10"></i> 
+                                    </a>
+
+                                    <a
+                                        data-toggle="tooltip" 
+                                        data-original-title="Borrar"
+                                        class="cursor"
+                                        (click)="borrarMedicos(medic)"> 
+                                        <i class="fa fa-close text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-secondary" (click)="nextMedicos(false)">Anteriores</button>
+                &nbsp;
+                <button class="btn btn-secondary" (click)="nextMedicos(true)">Siguientes</button>
+
+            </div>
+        </div>
+    </div>
+</div>

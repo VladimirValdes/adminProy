@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Hospitales } from '../models/hospital.model';
+import { Medicos } from '../models/medicos.moderl';
 import { Usuario } from '../models/user.model';
 import { UsuarioService } from './usuario.service';
 
@@ -25,7 +28,10 @@ export class BusquedasService {
                         switch ( tipo ) {
                           case 'usuarios':
                             return this.transformarUsuarios( resp.results );
-                        
+                          case 'hospitales':
+                              return this.transformarHospitales( resp.results );
+                          case 'medicos':
+                                return this.transformarMedicos( resp.results );
                           default:
                             return [];
                         }
@@ -39,5 +45,16 @@ export class BusquedasService {
     return results.map( user => new Usuario( user.nombre, user.correo, user.estado,
                                               '', user.uid, '', user.google, user.img,
                                               user.rol));
+  }
+
+
+  private transformarHospitales( results: any[]): Hospitales[] {
+
+    return results;
+  }
+
+  private transformarMedicos( results: any[]): Medicos[] {
+
+    return results;
   }
 }

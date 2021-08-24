@@ -6,7 +6,8 @@
                 <input type="text"
                         class="form-control"
                         placeholder="Buscar hospital..."
-                        #txtTermino
+                        #termino
+                        (keyup)="search( termino.value )"
                         >
 
             </div>
@@ -14,7 +15,8 @@
     </div>
 </div> 
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast"
+    *ngIf="loading">
     <div class="col-12">
         
         <div class="alert alert-info text-center">
@@ -27,7 +29,7 @@
 </div> 
 
 
-<div class="row">
+<div class="row" *ngIf="!loading">
 
     <div class="col-12">
         <div class="card">
@@ -35,7 +37,7 @@
 
                 <div class="row">
                     <div class="col-8">
-                        <h4 class="card-title">Hospitales </h4>
+                        <h4 class="card-title">Hospitales ({{ total }})</h4>
                         <h6 class="card-subtitle">
                             Hospitales registrados en mi aplicación
                         </h6>
@@ -43,7 +45,9 @@
 
                     <div class="col">
                         <div class="text-right">
-                            <button class="btn btn-primary">
+                            <button 
+                            class="btn btn-primary"
+                            (click)="agregarHospital()">
                                 <i class="fa fa-hospital-o"></i> 
                                 Crear hospital
                             </button>
@@ -67,32 +71,35 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr >
+                            <tr *ngFor="let hospital of hospitales">
                                 <td class="text-center"> 
-                                    <img 
-                                        
-                                        class="w100 cursor"
-                                        > 
+                                    <img
+                                        [src]="hospital.img! | imgen: 'hospitales'"
+                                        alt="hospital-img"
+                                        class="avatar cursor"
+                                        (click)="abrirModal(hospital)"> 
                                 </td>
                                 <td>
                                     <input type="text" 
                                             class="form-control"
                                             placeholder="Nombre del hospital"
-                                            />
+                                            [(ngModel)]="hospital.nombre">
                                 </td>
                                 
                                 <td class="text-nowrap text-center">
                                     <a 
                                         data-toggle="tooltip" 
                                         class="cursor"
-                                        data-original-title="Guardar cambios"> 
+                                        data-original-title="Guardar cambios"
+                                        (click)="updateHospitales( hospital._id!, hospital.nombre )"> 
                                         <i class="fa fa-pencil text-inverse m-r-10"></i> 
                                     </a>
 
                                     <a
                                         data-toggle="tooltip" 
                                         data-original-title="Borrar"
-                                        class="cursor"> 
+                                        class="cursor"
+                                        (click)="borrarHospitales( hospital )"> 
                                         <i class="fa fa-close text-danger"></i>
                                     </a>
                                 </td>
@@ -102,9 +109,9 @@
                     </table>
                 </div>
 
-                <!-- <button class="btn btn-secondary">Anteriores</button>
+                <button class="btn btn-secondary" (click)="nextHospitales(false)">Anteriores</button>
                 &nbsp;
-                <button class="btn btn-secondary">Siguientes</button> -->
+                <button class="btn btn-secondary" (click)="nextHospitales(true)">Siguientes</button>
 
             </div>
         </div>

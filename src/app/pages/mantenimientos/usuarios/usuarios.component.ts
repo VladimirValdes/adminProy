@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { Hospitales } from 'src/app/models/hospital.model';
 import { Usuario } from 'src/app/models/user.model';
 import { BusquedasService } from 'src/app/services/busquedas.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
@@ -48,7 +49,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
 
     this.busquedasService.buscar('usuarios', termino).subscribe( results => {
-      this.usuarios = results;
+      this.usuarios = results as Usuario[];
    });
    
 
