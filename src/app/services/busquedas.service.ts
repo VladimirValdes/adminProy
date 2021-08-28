@@ -20,6 +20,11 @@ export class BusquedasService {
                private usuarioServices: UsuarioService) { }
 
 
+  busquedaGlobal( termino: string ) {
+    return this.http.get(`${base_url}/search/todo/${ termino }`, this.usuarioServices.headers);
+  }
+
+
   buscar( tipo: 'usuarios' | 'medicos' | 'hospitales',
           termino: string ) {
     return this.http.get(`${ base_url }/search/${ tipo }/${ termino }`, this.usuarioServices.headers )

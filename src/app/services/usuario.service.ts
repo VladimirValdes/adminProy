@@ -9,6 +9,7 @@ import { loginForm } from '../interfaces/login-form.interface';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { Usuario } from '../models/user.model';
 import { cargaUsuarios } from '../interfaces/cargar-usuarios.interface';
+import { stringify } from '@angular/compiler/src/util';
 
 const base_url = environment.base_url;
 declare const gapi: any;
@@ -22,6 +23,7 @@ export class UsuarioService {
   auth2: any;
   // public user: Usuario = new Usuario(" "," ", " ", " ");
   public user: Usuario;
+  public menu: any[] = [];
 
 
   constructor( private http: HttpClient, 
@@ -32,12 +34,18 @@ export class UsuarioService {
     this.googleInit();
   }
 
+
+
   get token() {
     return this.readToken();
   }
 
   get uid() {
     return this.user.uid || '';
+  }
+
+  get rol(): 'ADMIN_ROLE' | 'USER_ROLE' {
+      return this.user.rol!;
   }
 
   get headers() {
@@ -90,7 +98,7 @@ export class UsuarioService {
 
             this.user = new Usuario( nombre, correo, estado, "", uid, " ", google, img, rol);
             console.log( this.user );
-            this.saveToken( resp.token );
+            this.saveToken( resp.token, resp.menu );
             return true;
         }),
         catchError( error => of(false))
@@ -105,7 +113,7 @@ export class UsuarioService {
     return this.http.post< Usuario >(`${ base_url}/usuarios`, formData)
                     .pipe(
                       map( ( resp: Usuario ) => {
-                        this.saveToken( resp.token );
+                        this.saveToken( resp.token, resp.menu );
                         return resp;
                       })
                     );
@@ -155,7 +163,7 @@ export class UsuarioService {
     return this.http.post< Usuario >(`${ base_url}/auth/login`, formData)
                     .pipe(
                       map( ( resp: Usuario ) => {
-                        this.saveToken( resp.token );
+                        this.saveToken( resp.token, resp.menu );
                         return resp;
                       })
                     );
@@ -163,6 +171,8 @@ export class UsuarioService {
 
   logout():void {
     localStorage.removeItem('x-token');
+    localStorage.removeItem('menu');
+
     this.auth2.signOut().then( () => {
 
       this.ngZone.run( () => {
@@ -176,7 +186,7 @@ export class UsuarioService {
     return this.http.post< Usuario >(`${ base_url}/auth/google`, { id_token })
                     .pipe(
                       map( ( resp: Usuario ) => {
-                        this.saveToken( resp.token );
+                        this.saveToken( resp.token, resp.menu );
                         return resp;
                       })
                     );
@@ -191,9 +201,11 @@ export class UsuarioService {
     return this.userToken;
   }
 
-  private saveToken( token: string ) {
+  private saveToken( token: string, menu: any ) {
     this.userToken = token;
 
     localStorage.setItem('x-token', this.userToken );
+    localStorage.setItem('menu', JSON.stringify(menu) );
+
   }
 }

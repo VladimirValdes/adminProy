@@ -54,6 +54,14 @@ export class UserProfileComponent implements OnInit {
         timer: 1500   
       })
     
+    }, ( err ) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Can not Update',
+        showConfirmButton: false,
+        timer: 1500   
+      });
+      console.log( err.error.msg );
     });
 
   }
