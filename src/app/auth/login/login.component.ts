@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   
   login() {
     this.formSubmitted = true;
-    console.log( this.loginForm.value );
+    // console.log( this.loginForm.value );
 
     if ( this.loginForm.invalid ) {
       return;
@@ -98,6 +98,8 @@ export class LoginComponent implements OnInit {
         ( googleUser: any ) => {
 
           const id_token = googleUser.getAuthResponse().id_token;
+
+          console.log('Google User logged !!!!!!!')
 
           this.usuarioService.googleSingIn( id_token ).subscribe( resp => {
 
